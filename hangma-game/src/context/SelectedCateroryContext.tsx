@@ -38,6 +38,7 @@ export const SelectedCategoryContext = createContext({} as ContextData);
 
 export const SelectedCategoryProvider: React.FC<Props> = ({ children }) => {
   let [wordData, setWordData] = useState<Data>(data);
+  console.log("current word data", wordData);
 
   const [selectedCategory, setSelectedCategory] =
     useState<CategoryKey>("movies");
@@ -68,6 +69,7 @@ export const SelectedCategoryProvider: React.FC<Props> = ({ children }) => {
           : word
     );
     console.log(updatedWordDataCategory);
+
     setWordData((prevData) => ({
       ...prevData,
       categories: {

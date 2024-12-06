@@ -33,10 +33,12 @@ const ModalComponent = ({
   const handleNewCategoryClick = () => {
     setGuessHistory([]);
     navigate("/pickCategory");
+    getWordForPlaying();
   };
   const handleQuit = () => {
     setGuessHistory([]);
     navigate("/");
+    getWordForPlaying();
   };
   return (
     <div
