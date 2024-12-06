@@ -1,0 +1,267 @@
+@font-face {
+  font-family: "MouseMemoirs";
+  src: url("./fonts/MouseMemoirs-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: "MouseMemoirs";
+}
+$blue: #2463ff;
+$darkNavi: #261676;
+$headingS-font-size: 32px;
+$headingL-font-size: 88px;
+$headingM-font-size: 48px;
+$body-font-size: 26px;
+
+// main Menu
+
+.background {
+  background-image: url(../public/images/background-desktop.jpg);
+  height: 100vh;
+  background-size: cover;
+  //   background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  font-size: 48px;
+  .mainContainer {
+    background-position: bottom;
+    border-bottom: 12px solid $darkNavi;
+    border-left: 5px solid $darkNavi;
+    border-right: 5px solid $darkNavi;
+    height: 500px;
+    width: 592px;
+    position: relative;
+    background-color: transparent;
+    border-radius: 72px;
+    box-shadow: inset 0 6px 0 5px $blue;
+
+    #logo {
+      position: absolute;
+      top: -90px;
+    }
+    #playBtn {
+      width: 200px;
+      height: 200px;
+    }
+    .btn {
+      width: 262px;
+      height: 62px;
+      border-radius: 40px;
+      font-size: $headingS-font-size;
+    }
+  }
+}
+// how to play
+
+.howToPlay {
+  .innerContainer {
+    .headRow {
+      padding: 70px 0px;
+      .positionStart {
+        left: 0px;
+      }
+    }
+
+    .help {
+      text-align: center;
+      div {
+        padding: 40px 50px !important;
+        background-color: white;
+        border-radius: 40px;
+        h4 {
+          color: $blue;
+          font-size: $headingL-font-size;
+          padding-bottom: 30px;
+        }
+        h6 {
+          color: $darkNavi;
+          font-size: $headingM-font-size;
+          padding-bottom: 20px;
+        }
+        p {
+          font-size: $body-font-size;
+          color: #887dc0;
+        }
+      }
+    }
+  }
+}
+
+// Pick catergory
+
+.pickCategory {
+  .innerContainer {
+    .headRow {
+      padding: 70px 0px;
+      .positionStart {
+        left: 0px;
+      }
+    }
+  }
+  .catergory {
+    color: white;
+    font-size: $headingM-font-size;
+    text-align: center;
+    div {
+      background-color: $blue;
+      border-radius: 40px;
+      padding: 30px;
+      margin-top: 50px;
+
+      border-bottom: 4px solid $darkNavi;
+      border-left: 2px solid $darkNavi;
+      border-right: 2px solid $darkNavi;
+      border-top: 1px solid $darkNavi;
+
+      box-shadow: inset 0 2px 0 2px #7199ff;
+      p {
+        margin-bottom: 0px;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+// inGame
+.inGame {
+  .innerContainer {
+    width: 100% !important;
+
+    .headRow {
+      padding: 70px 0px;
+      width: 80% !important;
+      margin: auto;
+
+      .menuIcon {
+        width: 94px;
+        height: 94px;
+        cursor: pointer;
+      }
+      p {
+        font-size: $headingL-font-size;
+        margin-bottom: 0px;
+      }
+    }
+    .showWord {
+      gap: 2rem !important;
+      text-align: center;
+      // width: 90%;
+      margin: auto;
+      justify-content: center;
+      .letterDiv {
+        width: 112px;
+        height: 128px;
+        font-size: $headingL-font-size;
+        color: white;
+        border-radius: 24px;
+      }
+    }
+    .keyboard {
+      gap: 2rem !important;
+      // width: 80% !important;
+      width: 1280px;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: auto;
+      position: absolute;
+      bottom: 40px;
+      .button {
+        width: 109px;
+        height: 84px;
+        border-radius: 24px;
+        background-color: white;
+        color: $darkNavi;
+        font-size: $headingM-font-size;
+      }
+    }
+  }
+}
+//ProgressBar
+.progressBarContainer {
+  background-color: white;
+  border-radius: 96px;
+  padding: 10px;
+  width: 240px;
+  .progressBar {
+    height: 13px;
+    background-color: $darkNavi;
+    border-radius: 96px;
+  }
+}
+.modalComponent {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  width: 542px !important;
+  height: 405px !important;
+  background-position: bottom !important;
+  border-bottom: 12px solid $darkNavi !important;
+  border-left: 5px solid $darkNavi !important;
+  border-right: 5px solid $darkNavi !important;
+  z-index: 2;
+  background: linear-gradient(to top, $darkNavi, rgba(52, 74, 186, 0.95));
+  background-color: red;
+  border-radius: 72px !important ;
+  box-shadow: inset 0 6px 0 5px $blue !important;
+  &:before {
+    content: "";
+    width: 1920px;
+    height: 100vh;
+    z-index: -1;
+    background: linear-gradient(
+      to top,
+      rgba(26, 3, 55, 0.5) 0%,
+      rgba(19, 19, 129, 0.5) 34%,
+      rgba(26, 3, 55, 0.5) 100%
+    );
+    position: absolute;
+  }
+
+  #modalImage {
+    position: absolute;
+    top: -45px;
+    background-color: transparent;
+  }
+
+  .btn {
+    width: 262px;
+    height: 62px;
+    border-radius: 40px;
+    font-size: $headingS-font-size;
+    &:first-of-type {
+      margin-top: 60px;
+    }
+  }
+}
+
+// Container in container BS PROBLEM fix
+@media (min-width: 576px) {
+  .background .innerContainer {
+    max-width: 540px;
+  }
+}
+@media (min-width: 768px) {
+  .background .innerContainer {
+    max-width: 720px;
+  }
+}
+@media (min-width: 992px) {
+  .background .innerContainer {
+    max-width: 960px;
+  }
+}
+@media (min-width: 1200px) {
+  .background .innerContainer {
+    max-width: 1140px;
+  }
+}
+@media (min-width: 1400px) {
+  .background .innerContainer {
+    max-width: 1620px;
+  }
+}
