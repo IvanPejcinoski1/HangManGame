@@ -7,7 +7,7 @@ import { SelectedCategoryContext } from "../context/SelectedCateroryContext";
 
 const PickCategory = () => {
   const navigate = useNavigate();
-  const { selectedCategory, setSelectedCategory } = useContext(
+  const { selectedCategory, setSelectedCategory, playClickSound } = useContext(
     SelectedCategoryContext
   );
   const handlePickedCategory = (catergory: any) => {
@@ -18,10 +18,10 @@ const PickCategory = () => {
   return (
     <Container fluid className="background pickCategory">
       <Row>
-        <Container className="innerContainer">
+        <Container className="innerContainer ">
           <Row className="headRow">
             <Col className="text-center position-relative">
-              <Link to={"/"}>
+              <Link to={"/"} onClick={playClickSound}>
                 <img
                   src="images/Back.png"
                   alt=""
@@ -29,14 +29,21 @@ const PickCategory = () => {
                 />
               </Link>
 
-              <img src="images/PickCategory.png" alt="" />
+              <img
+                src="images/PickCategory.png"
+                alt="Pick Category"
+                style={{ height: "122px", objectFit: "cover" }}
+              />
             </Col>
           </Row>
           <Row className="justify-content-center align-items-stretch">
             <Col
               className="catergory"
               lg={4}
-              onClick={() => handlePickedCategory("movies")}
+              onClick={() => {
+                playClickSound();
+                handlePickedCategory("movies");
+              }}
             >
               <div>
                 <p>MOVIES</p>
@@ -45,7 +52,10 @@ const PickCategory = () => {
             <Col
               className="catergory"
               lg={4}
-              onClick={() => handlePickedCategory("tvShows")}
+              onClick={() => {
+                playClickSound();
+                handlePickedCategory("tvShows");
+              }}
             >
               <div>
                 <p>TV SHOWS</p>
@@ -54,7 +64,10 @@ const PickCategory = () => {
             <Col
               className="catergory"
               lg={4}
-              onClick={() => handlePickedCategory("countries")}
+              onClick={() => {
+                playClickSound();
+                handlePickedCategory("countries");
+              }}
             >
               <div>
                 <p>COUNTRIES</p>
@@ -64,7 +77,10 @@ const PickCategory = () => {
             <Col
               className="catergory"
               lg={4}
-              onClick={() => handlePickedCategory("capitalCities")}
+              onClick={() => {
+                playClickSound();
+                handlePickedCategory("capitalCities");
+              }}
             >
               <div>
                 <p>CAPITAL CITIES</p>
@@ -74,7 +90,10 @@ const PickCategory = () => {
             <Col
               className="catergory"
               lg={4}
-              onClick={() => handlePickedCategory("animals")}
+              onClick={() => {
+                playClickSound();
+                handlePickedCategory("animals");
+              }}
             >
               <div>
                 <p>ANIMALS</p>
@@ -84,7 +103,10 @@ const PickCategory = () => {
             <Col
               className="catergory"
               lg={4}
-              onClick={() => handlePickedCategory("sports")}
+              onClick={() => {
+                playClickSound();
+                handlePickedCategory("sports");
+              }}
             >
               <div>
                 <p>SPORTS</p>

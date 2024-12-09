@@ -1,9 +1,7 @@
 import { useContext } from "react";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SelectedCategoryContext } from "../context/SelectedCateroryContext";
-import { Container, Row } from "react-bootstrap";
 
 interface Props {
   show: boolean;
@@ -17,25 +15,23 @@ const ModalComponent = ({
   winCondition,
   setGuessHistory,
 }: Props) => {
-  const { setModalShow, modalShow, getWordForPlaying } = useContext(
-    SelectedCategoryContext
-  );
+  const { setModalShow, getWordForPlaying, playClickSound, setIsGameWon } =
+    useContext(SelectedCategoryContext);
   const navigate = useNavigate();
-  const handleClick = (navigateArg: string) => {
-    setModalShow(false);
-    navigate(navigateArg);
-  };
+
   const hadlePlayAgain = () => {
     setGuessHistory([]);
     getWordForPlaying();
     setModalShow(false);
   };
   const handleNewCategoryClick = () => {
+    setModalShow(false);
     setGuessHistory([]);
     navigate("/pickCategory");
     getWordForPlaying();
   };
   const handleQuit = () => {
+    setModalShow(false);
     setGuessHistory([]);
     navigate("/");
     getWordForPlaying();
@@ -54,21 +50,38 @@ const ModalComponent = ({
         id="modalImage"
       />
       <Button
-        className={`btn `}
-        onClick={
-          mistakes == 8 || winCondition
-            ? () => hadlePlayAgain()
-            : () => setModalShow(false)
-        }
+        className={`btn`}
+        onClick={() => {
+          playClickSound();
+          if (mistakes == 8 || winCondition) {
+            setIsGameWon(false);
+            hadlePlayAgain();
+          } else {
+            setModalShow(false);
+          }
+        }}
       >
         {mistakes == 8 || winCondition ? "PLAY AGAIN" : "CONTINUE"}
       </Button>
-
-      <Button className="btn mt-4" onClick={handleNewCategoryClick}>
+      <Button
+        className="btn mt-4"
+        onClick={() => {
+          playClickSound();
+          setIsGameWon(false);
+          handleNewCategoryClick();
+        }}
+      >
         NEW CATEGORY
       </Button>
 
-      <Button className="btn mt-4" onClick={handleQuit}>
+      <Button
+        className="btn mt-4"
+        onClick={() => {
+          playClickSound();
+          setIsGameWon(false);
+          handleQuit();
+        }}
+      >
         QUIT GAME
       </Button>
     </div>

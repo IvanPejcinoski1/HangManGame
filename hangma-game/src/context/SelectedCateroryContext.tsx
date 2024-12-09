@@ -12,6 +12,9 @@ interface ContextData {
   modalShow: boolean;
   setModalShow: (arg: boolean) => void;
   getWordForPlaying: () => void;
+  playClickSound: () => void;
+  setIsGameWon: (arg: boolean) => void;
+  isGameWon: boolean;
 }
 
 interface Item {
@@ -38,7 +41,6 @@ export const SelectedCategoryContext = createContext({} as ContextData);
 
 export const SelectedCategoryProvider: React.FC<Props> = ({ children }) => {
   let [wordData, setWordData] = useState<Data>(data);
-  console.log("current word data", wordData);
 
   const [selectedCategory, setSelectedCategory] =
     useState<CategoryKey>("movies");
@@ -52,14 +54,7 @@ export const SelectedCategoryProvider: React.FC<Props> = ({ children }) => {
     let randomNumber = Math.floor(
       Math.random() * aviableWordsInTheSelectedCategory.length
     );
-    console.log(randomNumber);
-    console.log(aviableWordsInTheSelectedCategory[randomNumber]);
-    let indexOfTheWordForUpdating = wordData.categories[
-      selectedCategory
-    ].findIndex(
-      (word) =>
-        word.name === aviableWordsInTheSelectedCategory[randomNumber].name
-    );
+
     setWordForPlaying(aviableWordsInTheSelectedCategory[randomNumber].name);
 
     let updatedWordDataCategory = wordData.categories[selectedCategory].map(
@@ -68,7 +63,6 @@ export const SelectedCategoryProvider: React.FC<Props> = ({ children }) => {
           ? { ...word, selected: true }
           : word
     );
-    console.log(updatedWordDataCategory);
 
     setWordData((prevData) => ({
       ...prevData,
@@ -78,11 +72,20 @@ export const SelectedCategoryProvider: React.FC<Props> = ({ children }) => {
       },
     }));
   };
+
   useEffect(() => {
     getWordForPlaying();
   }, [selectedCategory]);
   const [modalShow, setModalShow] = useState(false);
 
+  const playClickSound = () => {
+    const clickSound = new Audio("/sounds/click.mp3");
+    clickSound.play();
+  };
+  const [isGameWon, setIsGameWon] = useState(false);
+  if (wordForPlaying === "") {
+    getWordForPlaying();
+  }
   return (
     <SelectedCategoryContext.Provider
       value={{
@@ -92,6 +95,9 @@ export const SelectedCategoryProvider: React.FC<Props> = ({ children }) => {
         modalShow,
         setModalShow,
         getWordForPlaying,
+        playClickSound,
+        setIsGameWon,
+        isGameWon,
       }}
     >
       {children}

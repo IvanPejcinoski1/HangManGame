@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
-import { Link, Route, Routes } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "@fortawesome/fontawesome-free/css/all.css";
+import { Container, Row, Col } from "react-bootstrap";
 import ProgressBar from "./ProgressBar";
 import { SelectedCategoryContext } from "../context/SelectedCateroryContext";
 import ModalComponent from "./ModalComponent";
@@ -10,208 +7,209 @@ import ModalComponent from "./ModalComponent";
 const InGame = () => {
   const {
     selectedCategory,
-    setSelectedCategory,
     wordForPlaying,
     setModalShow,
     modalShow,
+    playClickSound,
+    isGameWon,
+    setIsGameWon,
   } = useContext(SelectedCategoryContext);
-  let alphabet = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-  ];
 
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
   const [firstLine, setFirstLine] = useState("");
   const [secondLine, setSecondLine] = useState("");
   const [guessHistory, setGuessHistory] = useState<string[]>([]);
-  const [isGameWon, setIsGameWon] = useState(false);
 
-  let numberOfMistakes = guessHistory.filter(
+  const numberOfMistakes = guessHistory.filter(
     (letter) => !wordForPlaying.toUpperCase().includes(letter)
   ).length;
-  let uniqueLetters = new Set(wordForPlaying);
 
-  const renderWordForPlaying = (word: string) => {
-    let wordChunks = word.toUpperCase().split(/[ t]/).filter(Boolean);
+  const uniqueLetters = new Set(wordForPlaying.toUpperCase());
 
-    function mergeStrings(words: string[], maxLength = 12) {
-      const result: string[] = [];
-      let currentString = "";
+  const playSound = (url: string) => {
+    const audio = new Audio(url);
+    audio.play();
+  };
+  console.log(wordForPlaying);
 
-      words.forEach((word) => {
-        while (word.length > maxLength) {
-          const part = word.slice(0, maxLength - 1);
-          result.push(part + "-");
-          word = word.slice(maxLength - 1);
-        }
+  const handleGuess = (letter: string) => {
+    console.log(wordForPlaying);
+    console.log(guessHistory);
 
-        if (
-          currentString.length + word.length + (currentString ? 1 : 0) <=
-          maxLength
-        ) {
-          if (currentString) {
-            currentString += " ";
-          }
-          currentString += word;
-        } else {
-          result.push(currentString);
-          currentString = word;
-        }
-      });
-      if (currentString) {
-        result.push(currentString);
-      }
-      return result;
+    if (guessHistory.includes(letter)) return;
+
+    setGuessHistory((prev) => [...prev, letter]);
+
+    if (wordForPlaying.toUpperCase().includes(letter)) {
+      playSound("/sounds/guessed.mp3");
+    } else {
+      playSound("/sounds/mistake.mp3");
     }
-    const mergedStrings = mergeStrings(wordChunks);
-    setFirstLine(mergedStrings[0] || "");
-    setSecondLine(mergedStrings[1] || "");
   };
 
-  function capitalizeCategory(category: string) {
-    switch (category) {
-      case "movies":
-        return "Movies";
-      case "tvShows":
-        return "Tv shows";
-      case "countries":
-        return "Countries";
-      case "capitalCities":
-        return "Capital cities";
-      case "animals":
-        return "Animals";
-      case "sports":
-        return "Sports";
-      default:
-        return "Unknown category";
+  useEffect(() => {
+    if (isGameWon || numberOfMistakes === 8) {
+      return;
     }
-  }
+
+    const handleKeyPress = (event: KeyboardEvent) => {
+      const key = event.key.toUpperCase();
+      if (alphabet.includes(key) && !guessHistory.includes(key)) {
+        handleGuess(key);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [guessHistory, isGameWon, numberOfMistakes]);
 
   useEffect(() => {
+    const uniqueLettersArray = Array.from(uniqueLetters).filter(
+      (letter) => letter.trim() !== "" && letter !== "'"
+    );
+
     if (
-      Array.from(uniqueLetters)
-        .filter((letter) => letter.trim() !== "" && letter !== "'")
-        .every((letter) => guessHistory.includes(letter.toUpperCase()))
+      uniqueLettersArray.every((letter) =>
+        guessHistory.includes(letter.toUpperCase())
+      ) &&
+      uniqueLettersArray.length > 0 // Check if uniqueLettersArray is not empty
     ) {
       setIsGameWon(true);
-      setModalShow(true);
+      console.log(uniqueLettersArray);
+
+      setTimeout(() => {
+        setModalShow(true);
+        console.log("here");
+      }, 500);
     }
-    if (numberOfMistakes == 8) {
+
+    if (numberOfMistakes === 8) {
       setModalShow(true);
       setIsGameWon(false);
     }
-  }, [guessHistory]);
+  }, [guessHistory, numberOfMistakes, uniqueLetters]);
+
   useEffect(() => {
-    setIsGameWon(false);
-    setModalShow(false);
-  }, []);
-  useEffect(() => {
+    const renderWordForPlaying = (word: string) => {
+      const wordChunks = word.toUpperCase().split(/[ t]/).filter(Boolean);
+
+      const mergeStrings = (words: string[], maxLength = 12) => {
+        const result: string[] = [];
+        let currentString = "";
+
+        words.forEach((word) => {
+          while (word.length > maxLength) {
+            const part = word.slice(0, maxLength - 1);
+            result.push(part + "-");
+            word = word.slice(maxLength - 1);
+          }
+
+          if (
+            currentString.length + word.length + (currentString ? 1 : 0) <=
+            maxLength
+          ) {
+            if (currentString) currentString += " ";
+            currentString += word;
+          } else {
+            result.push(currentString);
+            currentString = word;
+          }
+        });
+        if (currentString) result.push(currentString);
+        return result;
+      };
+
+      const mergedStrings = mergeStrings(wordChunks);
+      setFirstLine(mergedStrings[0] || "");
+      setSecondLine(mergedStrings[1] || "");
+    };
+
     renderWordForPlaying(wordForPlaying);
   }, [wordForPlaying]);
 
   return (
     <Container fluid className="background inGame">
       <Row>
-        <Container className="innerContainer ">
-          <Row className="headRow ">
+        <Container className="innerContainer">
+          <Row className="headRow">
+            <img
+              src="images/Menu.png"
+              alt=""
+              className="menuIcon px-0 mt-3"
+              onClick={() => {
+                playClickSound();
+                setModalShow(true);
+              }}
+            />
             <Col className="d-flex align-items-center">
-              <img
-                src="images/Menu.png"
-                alt=""
-                className="menuIcon"
-                onClick={() => setModalShow(true)}
-              />
-              <p className="ps-5">{capitalizeCategory(selectedCategory)}</p>
+              <p className="ps-5">
+                {selectedCategory.charAt(0).toUpperCase() +
+                  selectedCategory.slice(1)}
+              </p>
               <ProgressBar mistakes={numberOfMistakes} />
             </Col>
           </Row>
-          <Row className="showWord ">
+          <Row className="showWord">
             <Col lg={12} className="d-flex justify-content-center gap-3">
-              {firstLine
-                .toUpperCase()
-                .split("")
-                .map((letter, index) => (
-                  <div
-                    key={index}
-                    className="letterDiv "
-                    style={{
-                      backgroundColor:
-                        letter === " "
-                          ? "transparent"
-                          : guessHistory.includes(letter)
-                          ? "#2463ff"
-                          : "rgba(38, 22, 118, 0.5)",
-                    }}
-                  >
-                    {guessHistory.includes(letter) || letter == "'"
-                      ? letter
-                      : ""}
-                  </div>
-                ))}
+              {firstLine.split("").map((letter, index) => (
+                <div
+                  key={index}
+                  className="letterDiv"
+                  style={{
+                    backgroundColor:
+                      letter === " "
+                        ? "transparent"
+                        : guessHistory.includes(letter) || letter === "'"
+                        ? "#2463ff"
+                        : "rgba(38, 22, 118, 0.5)",
+                  }}
+                >
+                  {guessHistory.includes(letter) || letter === "'"
+                    ? letter
+                    : ""}
+                </div>
+              ))}
             </Col>
             <Col lg={12} className="d-flex justify-content-center gap-3">
-              {secondLine
-                .toUpperCase()
-                .split("")
-                .map((letter, index) => (
-                  <div
-                    key={index}
-                    className="letterDiv "
-                    style={{
-                      backgroundColor:
-                        letter === " "
-                          ? "transparent"
-                          : guessHistory.includes(letter)
-                          ? "#2463ff"
-                          : "rgba(38, 22, 118, 0.5)",
-                    }}
-                  >
-                    {guessHistory.includes(letter) || letter == "'"
-                      ? letter
-                      : ""}
-                  </div>
-                ))}
+              {secondLine.split("").map((letter, index) => (
+                <div
+                  key={index}
+                  className="letterDiv"
+                  style={{
+                    backgroundColor:
+                      letter === " "
+                        ? "transparent"
+                        : guessHistory.includes(letter) || letter === "'"
+                        ? "#2463ff"
+                        : "rgba(38, 22, 118, 0.5)",
+                  }}
+                >
+                  {guessHistory.includes(letter) || letter === "'"
+                    ? letter
+                    : ""}
+                </div>
+              ))}
             </Col>
           </Row>
+
           <Row className="keyboard justify-content-center mx-auto py-3">
             {alphabet.map((letter, index) => (
               <div
-                onClick={() =>
-                  setGuessHistory((prevState) => [...prevState, letter])
-                }
                 key={index}
-                className="flex-shrink-0  button text-center align-content-center "
+                onClick={() => handleGuess(letter)}
+                className="button text-center pt-1"
                 style={{
                   cursor: "pointer",
                   backgroundColor: guessHistory.includes(letter)
                     ? "rgba(86,79,156,255)"
                     : "white",
-                  pointerEvents: guessHistory.includes(letter)
-                    ? "none"
-                    : "auto",
+                  pointerEvents:
+                    isGameWon || guessHistory.includes(letter)
+                      ? "none"
+                      : "auto",
                 }}
               >
                 {letter}
@@ -229,4 +227,5 @@ const InGame = () => {
     </Container>
   );
 };
+
 export default InGame;

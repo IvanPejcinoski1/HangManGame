@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
-// Add the following imports after running 'npm install react-bootstrap@latest bootstrap@latest react-router-dom@latest @fortawesome/fontawesome-free':
+import { SelectedCategoryContext } from "../context/SelectedCateroryContext";
 
 const MainMenu = () => {
+  const { playClickSound } = useContext(SelectedCategoryContext);
+
   return (
     <Container fluid className="background">
       <Row className="justifly-content-center align-items-center h-100">
@@ -14,7 +16,7 @@ const MainMenu = () => {
           lg={4}
         >
           <img src="images/logo.svg" alt="logo" id="logo" />
-          <Link to={"/pickCategory"}>
+          <Link to={"/pickCategory"} onClick={playClickSound}>
             <img
               src="images/PlayBtn.png"
               alt="play"
@@ -22,7 +24,7 @@ const MainMenu = () => {
               className="mt-5"
             />
           </Link>
-          <Link to={"/howToPlay"}>
+          <Link to={"/howToPlay"} onClick={playClickSound}>
             <Button className="btn mt-5">How to play</Button>
           </Link>
         </Col>
@@ -30,4 +32,5 @@ const MainMenu = () => {
     </Container>
   );
 };
+
 export default MainMenu;

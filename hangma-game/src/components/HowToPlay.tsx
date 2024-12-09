@@ -3,15 +3,17 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
+import { SelectedCategoryContext } from "../context/SelectedCateroryContext";
 
 const HowToPlay = () => {
+  const { playClickSound } = useContext(SelectedCategoryContext);
   return (
     <Container fluid className="background howToPlay">
       <Row>
         <Container className="innerContainer">
           <Row className="headRow">
             <Col className="text-center position-relative">
-              <Link to={"/"}>
+              <Link to={"/"} onClick={playClickSound}>
                 {" "}
                 <img
                   src="images/Back.png"
