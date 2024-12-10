@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 import data from "../data.json";
+import { CategoryKey, Data } from "../types";
 
 interface Props {
   children: ReactNode;
@@ -15,36 +16,17 @@ interface ContextData {
   playClickSound: () => void;
   setIsGameWon: (arg: boolean) => void;
   isGameWon: boolean;
+  wordData: Data;
 }
-
-interface Item {
-  name: string;
-  selected: boolean;
-}
-
-interface Categories {
-  movies: Item[];
-  tvShows: Item[];
-  countries: Item[];
-  capitalCities: Item[];
-  animals: Item[];
-  sports: Item[];
-}
-
-interface Data {
-  categories: Categories;
-}
-
-type CategoryKey = keyof Categories;
 
 export const SelectedCategoryContext = createContext({} as ContextData);
 
 export const SelectedCategoryProvider: React.FC<Props> = ({ children }) => {
-  let [wordData, setWordData] = useState<Data>(data);
-
+  const [wordData, setWordData] = useState<Data>(data);
+  const [modalShow, setModalShow] = useState(false);
+  const [wordForPlaying, setWordForPlaying] = useState("");
   const [selectedCategory, setSelectedCategory] =
     useState<CategoryKey>("movies");
-  const [wordForPlaying, setWordForPlaying] = useState("");
 
   const getWordForPlaying = () => {
     let aviableWordsInTheSelectedCategory = wordData.categories[
@@ -76,7 +58,6 @@ export const SelectedCategoryProvider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     getWordForPlaying();
   }, [selectedCategory]);
-  const [modalShow, setModalShow] = useState(false);
 
   const playClickSound = () => {
     const clickSound = new Audio("/sounds/click.mp3");
@@ -98,6 +79,7 @@ export const SelectedCategoryProvider: React.FC<Props> = ({ children }) => {
         playClickSound,
         setIsGameWon,
         isGameWon,
+        wordData,
       }}
     >
       {children}

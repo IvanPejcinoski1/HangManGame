@@ -18,7 +18,7 @@ const MainMenu = () => {
           <img src="images/logo.svg" alt="logo" id="logo" />
           <Link to={"/pickCategory"} onClick={playClickSound}>
             <img
-              src="images/PlayBtn.png"
+              src="/images/PlayBtn.png"
               alt="play"
               id="playBtn"
               className="mt-5"

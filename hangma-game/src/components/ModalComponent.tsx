@@ -43,9 +43,9 @@ const ModalComponent = ({
       } modalComponent mx-auto d-flex flex-column justify-content-center align-items-center `}
     >
       <img
-        src={`${mistakes == 8 ? "images/youLose.png" : ""} ${
-          winCondition ? "images/youWin.png" : ""
-        }  ${mistakes != 8 && !winCondition ? "images/paused.png" : ""}`}
+        src={`${mistakes == 8 ? "/images/youLose.png" : ""} ${
+          winCondition ? "/images/youWin.png" : ""
+        }  ${mistakes != 8 && !winCondition ? "/images/paused.png" : ""}`}
         alt="logo"
         id="modalImage"
       />

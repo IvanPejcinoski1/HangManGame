@@ -16,7 +16,7 @@ function App() {
           <Route path="/" element={<MainMenu />} />
           <Route path="/pickCategory" element={<PickCategory />} />
           <Route path="/howToPlay" element={<HowToPlay />} />
-          <Route path="/inGame" element={<InGame />} />
+          <Route path="/inGame/:catergory" element={<InGame />} />
         </Routes>
       </SelectedCategoryProvider>
     </div>

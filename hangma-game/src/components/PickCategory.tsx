@@ -7,12 +7,12 @@ import { SelectedCategoryContext } from "../context/SelectedCateroryContext";
 
 const PickCategory = () => {
   const navigate = useNavigate();
-  const { selectedCategory, setSelectedCategory, playClickSound } = useContext(
+  const { setSelectedCategory, playClickSound } = useContext(
     SelectedCategoryContext
   );
   const handlePickedCategory = (catergory: any) => {
     setSelectedCategory(catergory);
-    navigate("/inGame");
+    navigate(`/inGame/${catergory}`);
   };
 
   return (

@@ -3,6 +3,8 @@ import { Container, Row, Col } from "react-bootstrap";
 import ProgressBar from "./ProgressBar";
 import { SelectedCategoryContext } from "../context/SelectedCateroryContext";
 import ModalComponent from "./ModalComponent";
+import { useParams } from "react-router-dom";
+import { CategoryKey } from "../types";
 
 const InGame = () => {
   const {
@@ -13,6 +15,8 @@ const InGame = () => {
     playClickSound,
     isGameWon,
     setIsGameWon,
+    setSelectedCategory,
+    wordData,
   } = useContext(SelectedCategoryContext);
 
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -23,19 +27,20 @@ const InGame = () => {
   const numberOfMistakes = guessHistory.filter(
     (letter) => !wordForPlaying.toUpperCase().includes(letter)
   ).length;
-
   const uniqueLetters = new Set(wordForPlaying.toUpperCase());
 
   const playSound = (url: string) => {
     const audio = new Audio(url);
     audio.play();
   };
-  console.log(wordForPlaying);
 
+  const { catergory } = useParams();
+  useEffect(() => {
+    if (catergory && catergory in wordData.categories) {
+      setSelectedCategory(catergory as CategoryKey);
+    }
+  }, []);
   const handleGuess = (letter: string) => {
-    console.log(wordForPlaying);
-    console.log(guessHistory);
-
     if (guessHistory.includes(letter)) return;
 
     setGuessHistory((prev) => [...prev, letter]);
@@ -75,14 +80,11 @@ const InGame = () => {
       uniqueLettersArray.every((letter) =>
         guessHistory.includes(letter.toUpperCase())
       ) &&
-      uniqueLettersArray.length > 0 // Check if uniqueLettersArray is not empty
+      uniqueLettersArray.length > 0
     ) {
       setIsGameWon(true);
-      console.log(uniqueLettersArray);
-
       setTimeout(() => {
         setModalShow(true);
-        console.log("here");
       }, 500);
     }
 
@@ -136,8 +138,8 @@ const InGame = () => {
         <Container className="innerContainer">
           <Row className="headRow">
             <img
-              src="images/Menu.png"
-              alt=""
+              src="/images/Menu.png"
+              alt="menu"
               className="menuIcon px-0 mt-3"
               onClick={() => {
                 playClickSound();
